@@ -1,3 +1,38 @@
 <div class="container">
-  <h1>{{ title }}</h1>
+  <div class="game-ui">
+    <h1 class="title">{{ title }}</h1>
+    <div class="status" [ngClass]="{'win': status === 'win', 'draw': status === 'draw', 'ongoing': status === 'ongoing'}">
+      {{ statusText }}
+    </div>
+    <div class="board">
+      <div
+        class="row"
+        *ngFor="let row of board; let rowIndex = index"
+        [attr.data-row]="rowIndex"
+      >
+        <div
+          class="cell"
+          *ngFor="let cell of row; let colIndex = index"
+          [attr.data-col]="colIndex"
+          [ngClass]="{
+            'x-cell': cell === 'X',
+            'o-cell': cell === 'O',
+            'disabled': !!cell || status !== 'ongoing'
+          }"
+          (click)="onCellClick(rowIndex, colIndex)"
+        >
+          <span class="cell-value">{{ cell }}</span>
+        </div>
+      </div>
+    </div>
+    <button
+      class="restart-btn"
+      [ngClass]="{'active': status !== 'ongoing'}"
+      (click)="restartGame()"
+      aria-label="Restart Game"
+    >Restart</button>
+    <div class="footer">
+      <span>&copy; {{ currentYear }} Tic Tac Toe</span>
+    </div>
+  </div>
 </div>
